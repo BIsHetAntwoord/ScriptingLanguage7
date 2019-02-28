@@ -1,3 +1,7 @@
-.git
-bin
-obj
+.git/
+bin/
+obj/
+parser/lexer.scanner.cc
+parser/parser.parser.hh
+parser/parser.parser.cc
+parser/parser.parser.output

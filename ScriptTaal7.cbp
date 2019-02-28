@@ -54,6 +54,14 @@
 		</Unit>
 		<Unit filename="parser/parser_info.hpp" />
 		<Unit filename="util/strings.hpp" />
+		<Unit filename="vm/gc.cpp" />
+		<Unit filename="vm/gc.hpp" />
+		<Unit filename="vm/values/function.cpp" />
+		<Unit filename="vm/values/function.hpp" />
+		<Unit filename="vm/values/value.cpp" />
+		<Unit filename="vm/values/value.hpp" />
+		<Unit filename="vm/vm.cpp" />
+		<Unit filename="vm/vm.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

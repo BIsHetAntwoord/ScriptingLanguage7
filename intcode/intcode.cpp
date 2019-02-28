@@ -1,6 +1,7 @@
 #include "intcode/intcode.hpp"
 #include "intcode/intinstr.hpp"
 #include "intcode/treenode.hpp"
+#include "vm/gc.hpp"
 
 #include <memory>
 
@@ -23,6 +24,24 @@ IntCode::IntCode(IntInstr op) : op(op) {}
 IntCode::~IntCode()
 {
     delete this->next;
+}
+
+void IntCode::mark(GarbageCollector& gc, bool mark_self)
+{
+    if(mark_self)
+        gc.mark(this);
+
+    if(this->next)
+        this->next->mark(gc, false);
+}
+
+void IntCode::addBlocks(GarbageCollector& gc, bool mark_self)
+{
+    if(mark_self)
+        gc.addCode(this);
+
+    if(this->next)
+        this->next->addBlocks(gc, false);
 }
 
 void IntCode::setNext(IntCode* next)

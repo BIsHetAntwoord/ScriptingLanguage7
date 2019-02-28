@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 
         bytecode->print(std::cout);
 
-        VirtualMachine vm(bytecode);
-        vm.execute();
+        VirtualMachine vm;
+        vm.execute(bytecode.release());
     }
     catch(ParseException& e)
     {

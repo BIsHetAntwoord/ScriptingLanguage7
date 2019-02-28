@@ -4,6 +4,7 @@
 #include <iosfwd>
 
 class TreeNode;
+class GarbageCollector;
 
 enum class IntInstr
 {
@@ -50,6 +51,8 @@ class IntCode
         IntCode* getNext() const;
 
         virtual void print(std::ostream&) = 0;
+        virtual void mark(GarbageCollector&, bool = true);
+        virtual void addBlocks(GarbageCollector&, bool = true);
 };
 
 #endif // INTCODE_HPP_INCLUDED

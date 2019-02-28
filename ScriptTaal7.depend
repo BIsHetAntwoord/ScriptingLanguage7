@@ -1,0 +1,66 @@
+# depslib dependency file v1.0
+1551348874 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\main.cpp
+	"parser/parser.hpp"
+	"intcode/treenode.hpp"
+	"intcode/intcode.hpp"
+	"error/exceptions.hpp"
+	<iostream>
+
+1550153755 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\parser\parser.y
+	"parser/parser_info.hpp"
+	"intcode/treenode.hpp"
+	<iostream>
+
+1549884349 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\parser\parser.hpp
+	<string>
+	<cstdio>
+
+1550153541 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\parser\lexer.l
+	"parser/parser_info.hpp"
+	"parser/parser.parser.hh"
+	<cstring>
+
+1550230887 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\parser\parser.parser.hh
+
+1550151059 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\parser\parser_info.hpp
+	<string>
+	<cstdint>
+
+1550150028 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\parser\parser.cpp
+	"parser/parser.hpp"
+	"error/exceptions.hpp"
+	"parser/parser_info.hpp"
+
+1550149899 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\error\exceptions.hpp
+	"util/strings.hpp"
+	<stdexcept>
+
+1549884042 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\util\strings.hpp
+	<string>
+	<sstream>
+
+1550230598 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\treenode.hpp
+	<memory>
+	<iosfwd>
+
+1550226539 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\treenode.cpp
+	"intcode/treenode.hpp"
+	<iostream>
+
+1551348888 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intcode.cpp
+	"intcode/intcode.hpp"
+	"intcode/intinstr.hpp"
+	"intcode/treenode.hpp"
+	<memory>
+
+1550231274 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intcode.hpp
+	<iosfwd>
+
+1550231293 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intinstr.hpp
+	"intcode/intcode.hpp"
+	<string>
+
+1551348671 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intinstr.cpp
+	"intcode/intinstr.hpp"
+	<iostream>
+

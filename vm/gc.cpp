@@ -16,6 +16,9 @@ GarbageCollector::~GarbageCollector()
 
     for(auto i : this->all_code)
         delete i;
+
+    for(auto i : this->all_scopes)
+        delete i;
 }
 
 bool GarbageCollector::mark(ScriptValue* value)

@@ -75,7 +75,7 @@ void VirtualMachine::execute_function(ScriptFunction* func)
     this->value_stack = enclosing_value_stack;
 
     this->gc.removeRoot(current_scope);
-    this->scope_stack.pop_back(current_scope);
+    this->scope_stack.pop_back();
 
     this->call_stack.pop_back();
     this->exception_stack.pop_back();

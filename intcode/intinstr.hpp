@@ -36,4 +36,20 @@ class IntegerIntInstr : public IntCode
         virtual void print(std::ostream&);
 };
 
+class TargetIntInstr : public IntCode
+{
+    private:
+        IntCode* target;
+    public:
+        TargetIntInstr(IntInstr, IntCode*);
+        virtual ~TargetIntInstr() = default;
+
+        virtual void print(std::ostream&);
+
+        inline IntCode* getTarget() const
+        {
+            return this->target;
+        }
+};
+
 #endif // INTINSTR_HPP_INCLUDED

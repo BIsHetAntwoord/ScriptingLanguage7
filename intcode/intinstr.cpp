@@ -22,14 +22,17 @@ const char* OPCODE_NAMES[] = {
     "NEG",
     "COMPL",
 
-    "PUSHINT"
+    "PUSHINT",
+
+    "TRY",
+    "TRY_END"
 };
 
 BaseIntInstr::BaseIntInstr(IntInstr op) : IntCode(op) {}
 
 void BaseIntInstr::print(std::ostream& os)
 {
-    os << OPCODE_NAMES[size_t(this->op)] << std::endl;
+    os << this->ip << ": " << OPCODE_NAMES[size_t(this->op)] << std::endl;
     if(this->next)
         this->next->print(os);
 }
@@ -38,7 +41,7 @@ StrIntInstr::StrIntInstr(IntInstr op, const std::string& str) : IntCode(op), str
 
 void StrIntInstr::print(std::ostream& os)
 {
-    os << OPCODE_NAMES[size_t(this->op)] << " " << this->str << std::endl;
+    os << this->ip << ": " << OPCODE_NAMES[size_t(this->op)] << " " << this->str << std::endl;
     if(this->next)
         this->next->print(os);
 }
@@ -47,7 +50,16 @@ IntegerIntInstr::IntegerIntInstr(IntInstr op, uint64_t value) : IntCode(op), int
 
 void IntegerIntInstr::print(std::ostream& os)
 {
-    os << OPCODE_NAMES[size_t(this->op)] << " " << this->integer << std::endl;
+    os << this->ip << ": " << OPCODE_NAMES[size_t(this->op)] << " " << this->integer << std::endl;
+    if(this->next)
+        this->next->print(os);
+}
+
+TargetIntInstr::TargetIntInstr(IntInstr op, IntCode* target) : IntCode(op), target(target) {}
+
+void TargetIntInstr::print(std::ostream& os)
+{
+    os << this->ip << ": " << OPCODE_NAMES[size_t(this->op)] << " #" << this->target->getIP() << std::endl;
     if(this->next)
         this->next->print(os);
 }

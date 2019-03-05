@@ -221,6 +221,18 @@ class BitNotNode : public ExpressionNode
         virtual IntCode* generate(const compile_info&);
 };
 
+class TryNode : public ExpressionNode
+{
+    private:
+        std::unique_ptr<ExpressionNode> op;
+    public:
+        TryNode(ExpressionNode*);
+        virtual ~TryNode() = default;
+
+        virtual void print(std::ostream&, size_t);
+        virtual IntCode* generate(const compile_info&);
+};
+
 class VariableNode : public ExpressionNode
 {
     private:

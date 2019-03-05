@@ -27,7 +27,10 @@ enum class IntInstr
     NEG,
     COMPL,
 
-    PUSHINT
+    PUSHINT,
+
+    TRY,
+    TRY_END
 };
 
 struct compile_info
@@ -40,6 +43,7 @@ class IntCode
     protected:
         IntInstr op;
         IntCode* next = nullptr;
+        size_t ip;
 
         IntCode(IntInstr);
     public:
@@ -50,9 +54,21 @@ class IntCode
         void setNext(IntCode*);
         IntCode* getNext() const;
 
+        inline IntInstr getOp() const
+        {
+            return this->op;
+        }
+
         virtual void print(std::ostream&) = 0;
         virtual void mark(GarbageCollector&, bool = true);
         virtual void addBlocks(GarbageCollector&, bool = true);
+
+        void setIP(size_t);
+
+        inline size_t getIP() const
+        {
+            return this->ip;
+        }
 };
 
 #endif // INTCODE_HPP_INCLUDED

@@ -25,10 +25,12 @@ int main(int argc, char* argv[])
         compile_info info;
         std::unique_ptr<IntCode> bytecode(synttree->generate(info));
 
+        bytecode->setIP(0);
+
         bytecode->print(std::cout);
 
         VirtualMachine vm;
-        vm.execute(bytecode.release());
+        //vm.execute(bytecode.release());
     }
     catch(ParseException& e)
     {

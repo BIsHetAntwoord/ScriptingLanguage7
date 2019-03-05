@@ -38,6 +38,7 @@ IDENTIFIER {IDCHAR}({IDCHAR}|{DIGIT})*
 
 <INITIAL>
 {
+    "try"                                                                   {return TRY;}
     "="                                                                     {return ASSIGN;}
     "+"                                                                     {return PLUS;}
     "-"                                                                     {return MIN;}
@@ -49,6 +50,8 @@ IDENTIFIER {IDCHAR}({IDCHAR}|{DIGIT})*
     "^"                                                                     {return BITXOR;}
     "~"                                                                     {return BITNOT;}
     ";"                                                                     {return SEMICOLON;}
+    "("                                                                     {return OPEN_PAR;}
+    ")"                                                                     {return CLOSE_PAR;}
     "0b"{BIN_DIGIT}+                                                        {yylval->integer = std::strtoull(yytext, nullptr, 2); return INTEGER;}
     "0x"{HEX_DIGIT}+                                                        {yylval->integer = std::strtoull(yytext, nullptr, 16); return INTEGER;}
     "0"{OCT_DIGIT}+                                                         {yylval->integer = std::strtoull(yytext, nullptr, 8); return INTEGER;}

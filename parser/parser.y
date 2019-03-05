@@ -14,6 +14,7 @@
 
 %define api.prefix {parser_yy}
 
+%token TRY "try"
 %token SEMICOLON ";"
 %token ASSIGN "="
 %token PLUS "+"
@@ -25,6 +26,9 @@
 %token BITOR "|"
 %token BITXOR "^"
 %token BITNOT "~"
+
+%token OPEN_PAR "("
+%token CLOSE_PAR ")"
 
 %token<integer> INTEGER "integer"
 %token<str> ID
@@ -39,9 +43,9 @@
 %left BITAND
 %left PLUS MIN
 %left MUL DIV MOD
-%right UPLUS UMIN BITNOT
+%right UPLUS UMIN BITNOT TRY
 
-%type<node> statement_list statement expression constant
+%type<node> statement_list statement expression calc_expression constant
 %type<node> lvalue rvalue
 
 %%
@@ -62,7 +66,11 @@ statement
 
 expression
     : lvalue                                                            {$$ = $1;}
-    | rvalue                                                            {$$ = $1;}
+    | calc_expression                                                   {$$ = $1;}
+    ;
+
+calc_expression
+    : rvalue                                                            {$$ = $1;}
     | lvalue ASSIGN expression                                          {$$ = new AssignNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
     | expression PLUS expression                                        {$$ = new AddNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
     | expression MIN expression                                         {$$ = new SubNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
@@ -75,10 +83,13 @@ expression
     | PLUS expression %prec UPLUS                                       {$$ = new UPlusNode((ExpressionNode*)$2);}
     | MIN expression %prec UMIN                                         {$$ = new UMinNode((ExpressionNode*)$2);}
     | BITNOT expression                                                 {$$ = new BitNotNode((ExpressionNode*)$2);}
+    | TRY expression                                                    {$$ = new TryNode((ExpressionNode*)$2);}
+    | OPEN_PAR calc_expression CLOSE_PAR                                {$$ = $2;}
     ;
 
 lvalue
     : ID                                                                {$$ = new VariableNode($1); delete[] $1;}
+    | OPEN_PAR lvalue CLOSE_PAR                                         {$$ = $2;}
     ;
 
 rvalue

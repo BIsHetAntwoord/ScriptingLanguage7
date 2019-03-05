@@ -4,13 +4,15 @@
 #include "vm/values/value.hpp"
 
 class IntCode;
+class Scope;
 
 class ScriptFunction : public ScriptValue
 {
     private:
         IntCode* code;
+        Scope* enclosing;
     public:
-        ScriptFunction(IntCode*);
+        ScriptFunction(IntCode*, Scope*);
         ~ScriptFunction();
 
         virtual void mark(GarbageCollector&);
@@ -18,6 +20,11 @@ class ScriptFunction : public ScriptValue
         inline IntCode* getCode() const
         {
             return this->code;
+        }
+
+        inline Scope* getEnclosingScope() const
+        {
+            return this->enclosing;
         }
 };
 

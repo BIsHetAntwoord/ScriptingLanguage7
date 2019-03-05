@@ -54,10 +54,18 @@
 		</Unit>
 		<Unit filename="parser/parser_info.hpp" />
 		<Unit filename="util/strings.hpp" />
+		<Unit filename="vm/except.cpp" />
+		<Unit filename="vm/except.hpp" />
 		<Unit filename="vm/gc.cpp" />
 		<Unit filename="vm/gc.hpp" />
+		<Unit filename="vm/scope.cpp" />
+		<Unit filename="vm/scope.hpp" />
 		<Unit filename="vm/values/function.cpp" />
 		<Unit filename="vm/values/function.hpp" />
+		<Unit filename="vm/values/reference.cpp" />
+		<Unit filename="vm/values/reference.hpp" />
+		<Unit filename="vm/values/table.cpp" />
+		<Unit filename="vm/values/table.hpp" />
 		<Unit filename="vm/values/value.cpp" />
 		<Unit filename="vm/values/value.hpp" />
 		<Unit filename="vm/vm.cpp" />

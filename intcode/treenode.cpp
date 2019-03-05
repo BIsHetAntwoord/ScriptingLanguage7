@@ -154,6 +154,15 @@ void BitNotNode::print(std::ostream& os, size_t level)
     this->op->print(os, level+1);
 }
 
+TryNode::TryNode(ExpressionNode* op) : op(op) {}
+
+void TryNode::print(std::ostream& os, size_t level)
+{
+    print_indent(os, level);
+    os << "Try Expression:" << std::endl;
+    this->op->print(os, level+1);
+}
+
 VariableNode::VariableNode(const std::string& name) : name(name) {}
 
 void VariableNode::print(std::ostream& os, size_t level)

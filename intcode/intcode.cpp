@@ -54,6 +54,13 @@ IntCode* IntCode::getNext() const
     return this->next;
 }
 
+void IntCode::setIP(size_t ip)
+{
+    this->ip = ip;
+    if(this->next)
+        this->next->setIP(ip + 1);
+}
+
 IntCode* StatementListNode::generate(const compile_info& info)
 {
     std::unique_ptr<IntCode> lop(this->left->generate(info));
@@ -178,6 +185,15 @@ IntCode* BitNotNode::generate(const compile_info& info)
     std::unique_ptr<IntCode> operation(new BaseIntInstr(IntInstr::COMPL));
 
     return concat(op.release(), operation.release());
+}
+
+IntCode* TryNode::generate(const compile_info& info)
+{
+    std::unique_ptr<IntCode> op(this->op->generate(info));
+    std::unique_ptr<IntCode> try_end(new BaseIntInstr(IntInstr::TRY_END));
+    std::unique_ptr<IntCode> try_start(new TargetIntInstr(IntInstr::TRY, try_end.get()));
+
+    return concat(try_start.release(), concat(op.release(), try_end.release()));
 }
 
 IntCode* VariableNode::generate(const compile_info& info)

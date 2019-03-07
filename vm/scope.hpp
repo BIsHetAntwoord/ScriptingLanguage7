@@ -2,9 +2,12 @@
 #define VM_SCOPE_HPP_INCLUDED
 
 #include <vector>
+#include <string>
 
 class GarbageCollector;
 class ScriptTable;
+class ScriptReference;
+class ScriptValue;
 
 class Scope
 {
@@ -13,7 +16,7 @@ class Scope
         ScriptTable* table;
     public:
         Scope(GarbageCollector&, Scope* = nullptr);
-        ~Scope();
+        ~Scope() = default;
 
         inline ScriptTable* getTable()
         {
@@ -26,6 +29,9 @@ class Scope
         }
 
         void mark(GarbageCollector&);
+
+        ScriptReference* lookup(const std::string&, bool);
+        ScriptReference* set(const std::string&, ScriptValue*, GarbageCollector&);
 };
 
 #endif // VM_SCOPE_HPP_INCLUDED

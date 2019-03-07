@@ -26,6 +26,11 @@ class ScriptFunction : public ScriptValue
         {
             return this->enclosing;
         }
+
+        inline virtual ValueType getType() const
+        {
+            return ValueType::FUNCTION;
+        }
 };
 
 #endif // VM_VALUES_FUNCTION_HPP_INCLUDED

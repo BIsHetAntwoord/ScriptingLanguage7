@@ -17,6 +17,15 @@ class ScriptReference : public ScriptValue
         {
             return this->value;
         }
+        inline void setValue(ScriptValue* value)
+        {
+            this->value = value;
+        }
+
+        inline virtual ValueType getType() const
+        {
+            return ValueType::REFERENCE;
+        }
 };
 
 #endif // VM_VALUES_REFERENCE_HPP_INCLUDED

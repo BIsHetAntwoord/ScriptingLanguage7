@@ -23,6 +23,11 @@ class StrIntInstr : public IntCode
         virtual ~StrIntInstr() = default;
 
         virtual void print(std::ostream&);
+
+        inline std::string getStr() const
+        {
+            return this->str;
+        }
 };
 
 class IntegerIntInstr : public IntCode

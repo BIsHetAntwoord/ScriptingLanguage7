@@ -1,5 +1,6 @@
 #include "vm/vm.hpp"
 #include "vm/values/function.hpp"
+#include "vm/values/null.hpp"
 #include "intcode/intcode.hpp"
 #include "intcode/intinstr.hpp"
 #include "vm/scope.hpp"
@@ -124,7 +125,15 @@ void VirtualMachine::execute_load(IntCode* instr, IntCode*&)
 {
     Scope* current_scope = this->scope_stack.back();
 
-    ///TODO: implement
+    StrIntInstr* instr_str = (StrIntInstr*)instr;
+    ScriptReference* ref = current_scope->lookup(instr_str->getStr(), true);
+    if(ref == nullptr)
+    {
+        //Create the variable
+        ScriptValue* value = this->gc.makeValue<ScriptNull>();
+        ref = current_scope->set(instr_str->getStr(), value, this->gc);
+    }
+    this->value_stack->push_back(ref);
 }
 
 void VirtualMachine::execute_add(IntCode*, IntCode*&) {}

@@ -13,6 +13,15 @@ class ScriptNull : public ScriptValue
         {
             return ValueType::NULL_T;
         }
+
+        inline virtual int64_t getInteger() const
+        {
+            return 0;
+        }
+        inline virtual double getFloat() const
+        {
+            return 0.0;
+        }
 };
 
 #endif // SCRIPT_VALUES_NULL_HPP_INCLUDED

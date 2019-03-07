@@ -1,6 +1,9 @@
 #include "vm/vm.hpp"
 #include "vm/values/function.hpp"
 #include "vm/values/null.hpp"
+#include "vm/values/integer.hpp"
+#include "vm/values/reference.hpp"
+#include "vm/values/string.hpp"
 #include "intcode/intcode.hpp"
 #include "intcode/intinstr.hpp"
 #include "vm/scope.hpp"
@@ -27,6 +30,14 @@ const instr_callback INSTR_CALLBACKS[] = {
     VirtualMachine::execute_try,
     VirtualMachine::execute_try_end
 };
+
+ScriptValue* resolve_reference(ScriptValue* ref)
+{
+    while(ref->getType() == ValueType::REFERENCE)
+        ref = ((ScriptReference*)ref)->getValue();
+
+    return ref;
+}
 
 VirtualMachine::VirtualMachine()
 {
@@ -95,6 +106,12 @@ void VirtualMachine::throw_exception()
     this->exception_state = true;
 }
 
+void VirtualMachine::throw_exception(const std::string& arg)
+{
+    this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptString>(arg)));
+    this->throw_exception();
+}
+
 bool VirtualMachine::handle_exception(IntCode*& next)
 {
     size_t stack_unwind;
@@ -136,10 +153,25 @@ void VirtualMachine::execute_load(IntCode* instr, IntCode*&)
     this->value_stack->push_back(ref);
 }
 
-void VirtualMachine::execute_add(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_sub(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_mul(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_div(IntCode*, IntCode*&) {}
+void VirtualMachine::execute_add(IntCode*, IntCode*&)
+{
+    this->execute_binop([](auto x, auto y) {return x + y;});
+}
+
+void VirtualMachine::execute_sub(IntCode*, IntCode*&)
+{
+    this->execute_binop([](auto x, auto y) {return x - y;});
+}
+
+void VirtualMachine::execute_mul(IntCode*, IntCode*&)
+{
+    this->execute_binop([](auto x, auto y) {return x * y;});
+}
+
+void VirtualMachine::execute_div(IntCode*, IntCode*&)
+{
+}
+
 void VirtualMachine::execute_mod(IntCode*, IntCode*&) {}
 void VirtualMachine::execute_bitand(IntCode*, IntCode*&) {}
 void VirtualMachine::execute_bitor(IntCode*, IntCode*&) {}
@@ -147,7 +179,13 @@ void VirtualMachine::execute_bitxor(IntCode*, IntCode*&) {}
 void VirtualMachine::execute_uplus(IntCode*, IntCode*&) {}
 void VirtualMachine::execute_neg(IntCode*, IntCode*&) {}
 void VirtualMachine::execute_compl(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_pushint(IntCode*, IntCode*&) {}
+
+void VirtualMachine::execute_pushint(IntCode* instr, IntCode*&)
+{
+    IntegerIntInstr* int_instr = (IntegerIntInstr*)instr;
+    int64_t value = int_instr->getInteger();
+    this->value_stack->push_back(gc.makeValue<ScriptReference>(gc.makeValue<ScriptInteger>(value)));
+}
 
 void VirtualMachine::execute_try(IntCode* current, IntCode*&)
 {

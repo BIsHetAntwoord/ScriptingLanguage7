@@ -39,6 +39,11 @@ class IntegerIntInstr : public IntCode
         virtual ~IntegerIntInstr() = default;
 
         virtual void print(std::ostream&);
+
+        inline uint64_t getInteger() const
+        {
+            return this->integer;
+        }
 };
 
 class TargetIntInstr : public IntCode

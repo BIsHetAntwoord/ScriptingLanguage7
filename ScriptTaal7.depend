@@ -58,7 +58,7 @@
 1551699593 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intcode.hpp
 	<iosfwd>
 
-1551785743 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intinstr.hpp
+1551955411 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\intcode\intinstr.hpp
 	"intcode/intcode.hpp"
 	<string>
 
@@ -66,15 +66,20 @@
 	"intcode/intinstr.hpp"
 	<iostream>
 
-1551784414 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\vm.hpp
+1551959040 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\vm.hpp
 	<vector>
+	<string>
 	"vm/gc.hpp"
 	"vm/except.hpp"
+	"vm/vm.inl"
 
-1551954836 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\vm.cpp
+1551959127 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\vm.cpp
 	"vm/vm.hpp"
 	"vm/values/function.hpp"
 	"vm/values/null.hpp"
+	"vm/values/integer.hpp"
+	"vm/values/reference.hpp"
+	"vm/values/string.hpp"
 	"intcode/intcode.hpp"
 	"intcode/intinstr.hpp"
 	"vm/scope.hpp"
@@ -82,7 +87,8 @@
 1551954556 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\function.hpp
 	"vm/values/value.hpp"
 
-1551954438 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\value.hpp
+1551959051 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\value.hpp
+	<cstdint>
 
 1551781886 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\function.cpp
 	"vm/values/function.hpp"
@@ -93,9 +99,10 @@
 1551784034 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\gc.hpp
 	<vector>
 
-1551351144 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\value.cpp
+1551958816 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\value.cpp
 	"vm/values/value.hpp"
 	"vm/gc.hpp"
+	<limits>
 
 1551784840 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\gc.cpp
 	"vm/gc.hpp"
@@ -139,7 +146,7 @@
 	"vm/values/reference.hpp"
 	"vm/values/string.hpp"
 
-1551954574 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\null.hpp
+1551958876 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\null.hpp
 	"vm/values/value.hpp"
 
 1551954819 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\string.hpp
@@ -148,4 +155,20 @@
 
 1551954877 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\string.cpp
 	"vm/values/string.hpp"
+
+1551955694 source:d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\integer.cpp
+	"vm/values/integer.hpp"
+
+1551958901 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\integer.hpp
+	"vm/values/value.hpp"
+	<cstdint>
+
+1551958846 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\vm.inl
+	"vm/values/value.hpp"
+	"vm/values/reference.hpp"
+	"vm/values/float.hpp"
+	"vm/values/integer.hpp"
+
+1551959014 d:\bestanden\data\codes\programeren\c++\projecten\scripttaal7\vm\values\float.hpp
+	"vm/values/value.hpp"
 

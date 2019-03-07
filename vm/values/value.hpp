@@ -3,6 +3,8 @@
 
 class GarbageCollector;
 
+#include <cstdint>
+
 enum class ValueType
 {
     NULL_T,
@@ -23,6 +25,9 @@ class ScriptValue
 
         virtual void mark(GarbageCollector&);
         virtual ValueType getType() const = 0;
+
+        virtual double getFloat() const;
+        virtual int64_t getInteger() const;
 };
 
 #endif // VM_VALUES_VALUE_HPP_INCLUDED

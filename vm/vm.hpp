@@ -2,6 +2,7 @@
 #define VM_VM_HPP_INCLUDED
 
 #include <vector>
+#include <string>
 
 #include "vm/gc.hpp"
 #include "vm/except.hpp"
@@ -24,7 +25,11 @@ class VirtualMachine
         void execute_function(ScriptFunction*);
 
         void throw_exception();
+        void throw_exception(const std::string&);
         bool handle_exception(IntCode*&);
+
+        template <typename T>
+        void execute_binop(T callback);
     public:
         VirtualMachine();
         ~VirtualMachine();
@@ -55,5 +60,7 @@ class VirtualMachine
         void execute_try(IntCode*, IntCode*&);
         void execute_try_end(IntCode*, IntCode*&);
 };
+
+#include "vm/vm.inl"
 
 #endif // VM_HPP_INCLUDED

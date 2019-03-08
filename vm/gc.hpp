@@ -22,6 +22,8 @@ class GarbageCollector
         std::vector<ScriptValue*> root_values;
         std::vector<Scope*> root_scopes;
         std::vector<std::vector<ScriptReference*>*> root_value_stacks;
+
+        size_t cycle_counter = 0;
     public:
         GarbageCollector();
         ~GarbageCollector();

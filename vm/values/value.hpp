@@ -11,6 +11,7 @@ enum class ValueType
     NULL_T,
     INTEGER,
     FLOAT,
+    BOOLEAN,
     STRING,
     TABLE,
     REFERENCE,

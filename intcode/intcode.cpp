@@ -163,6 +163,15 @@ IntCode* BitXorNode::generate(const compile_info& info)
     return concat(concat(lop.release(), rop.release()), operation.release());
 }
 
+IntCode* ConcatNode::generate(const compile_info& info)
+{
+    std::unique_ptr<IntCode> lop(this->lop->generate(info));
+    std::unique_ptr<IntCode> rop(this->rop->generate(info));
+    std::unique_ptr<IntCode> operation(new BaseIntInstr(IntInstr::CONCAT));
+
+    return concat(concat(lop.release(), rop.release()), operation.release());
+}
+
 IntCode* UPlusNode::generate(const compile_info& info)
 {
     std::unique_ptr<IntCode> op(this->op->generate(info));
@@ -209,4 +218,14 @@ IntCode* IntegerNode::generate(const compile_info& info)
 IntCode* FloatNode::generate(const compile_info& info)
 {
     return new FloatIntInstr(IntInstr::PUSHFLT, this->value);
+}
+
+IntCode* StringNode::generate(const compile_info& info)
+{
+    return new StrIntInstr(IntInstr::PUSHSTR, this->value);
+}
+
+IntCode* BoolNode::generate(const compile_info& info)
+{
+    return new IntegerIntInstr(IntInstr::PUSHBOOL, this->value);
 }

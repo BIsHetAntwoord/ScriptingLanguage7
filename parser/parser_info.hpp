@@ -21,6 +21,7 @@ struct parse_info
     void* scanner;
     uint64_t line;
     uint64_t errors;
+    std::string parse_str;
     TreeNode* root;
 };
 

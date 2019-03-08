@@ -14,7 +14,10 @@
 
 %define api.prefix {parser_yy}
 
+%token FALSE "false"
+%token TRUE "true"
 %token TRY "try"
+
 %token SEMICOLON ";"
 %token ASSIGN "="
 %token PLUS "+"
@@ -26,19 +29,22 @@
 %token BITOR "|"
 %token BITXOR "^"
 %token BITNOT "~"
+%token CONCAT ".."
 
 %token OPEN_PAR "("
 %token CLOSE_PAR ")"
 
 %token<integer> INTEGER "integer"
 %token<flt> FLOAT "float"
-%token<str> ID
+%token<str> ID "identifier"
+%token<str> STRING "string"
 %token ERROR_TOKEN "error token"
 
 %destructor {delete[] $$;} <str>
 %destructor {delete $$;} <node>
 
 %right ASSIGN
+%left CONCAT
 %left BITXOR
 %left BITOR
 %left BITAND
@@ -81,6 +87,7 @@ calc_expression
     | expression BITAND expression                                      {$$ = new BitAndNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
     | expression BITOR expression                                       {$$ = new BitOrNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
     | expression BITXOR expression                                      {$$ = new BitXorNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
+    | expression CONCAT expression                                      {$$ = new ConcatNode((ExpressionNode*)$1, (ExpressionNode*)$3);}
     | PLUS expression %prec UPLUS                                       {$$ = new UPlusNode((ExpressionNode*)$2);}
     | MIN expression %prec UMIN                                         {$$ = new UMinNode((ExpressionNode*)$2);}
     | BITNOT expression                                                 {$$ = new BitNotNode((ExpressionNode*)$2);}
@@ -100,6 +107,9 @@ rvalue
 constant
     : INTEGER                                                           {$$ = new IntegerNode($1);}
     | FLOAT                                                             {$$ = new FloatNode($1);}
+    | STRING                                                            {$$ = new StringNode($1); delete[] $1;}
+    | TRUE                                                              {$$ = new BoolNode(true);}
+    | FALSE                                                             {$$ = new BoolNode(false);}
     ;
 
 %%

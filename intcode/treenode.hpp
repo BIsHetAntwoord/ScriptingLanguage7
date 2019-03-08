@@ -185,6 +185,19 @@ class BitXorNode : public ExpressionNode
         virtual IntCode* generate(const compile_info&);
 };
 
+class ConcatNode : public ExpressionNode
+{
+    private:
+        std::unique_ptr<ExpressionNode> lop;
+        std::unique_ptr<ExpressionNode> rop;
+    public:
+        ConcatNode(ExpressionNode*, ExpressionNode*);
+        virtual ~ConcatNode() = default;
+
+        virtual void print(std::ostream&, size_t);
+        virtual IntCode* generate(const compile_info&);
+};
+
 class UPlusNode : public ExpressionNode
 {
     private:
@@ -271,6 +284,30 @@ class FloatNode : public ConstantNode
     public:
         FloatNode(double);
         virtual ~FloatNode() = default;
+
+        virtual void print(std::ostream&, size_t);
+        virtual IntCode* generate(const compile_info&);
+};
+
+class StringNode : public ConstantNode
+{
+    private:
+        std::string value;
+    public:
+        StringNode(const std::string&);
+        virtual ~StringNode() = default;
+
+        virtual void print(std::ostream&, size_t);
+        virtual IntCode* generate(const compile_info&);
+};
+
+class BoolNode : public ConstantNode
+{
+    private:
+        bool value;
+    public:
+        BoolNode(bool);
+        virtual ~BoolNode() = default;
 
         virtual void print(std::ostream&, size_t);
         virtual IntCode* generate(const compile_info&);

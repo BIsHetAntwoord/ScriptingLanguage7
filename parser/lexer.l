@@ -34,10 +34,14 @@ NEWLINE \r?\n|\r
 IDCHAR [_A-Za-z]
 IDENTIFIER {IDCHAR}({IDCHAR}|{DIGIT})*
 
+%x STR
+
 %%
 
 <INITIAL>
 {
+    "false"                                                                 {return FALSE;}
+    "true"                                                                  {return TRUE;}
     "try"                                                                   {return TRY;}
     "="                                                                     {return ASSIGN;}
     "+"                                                                     {return PLUS;}
@@ -49,6 +53,7 @@ IDENTIFIER {IDCHAR}({IDCHAR}|{DIGIT})*
     "|"                                                                     {return BITOR;}
     "^"                                                                     {return BITXOR;}
     "~"                                                                     {return BITNOT;}
+    ".."                                                                    {return CONCAT;}
     ";"                                                                     {return SEMICOLON;}
     "("                                                                     {return OPEN_PAR;}
     ")"                                                                     {return CLOSE_PAR;}
@@ -57,10 +62,30 @@ IDENTIFIER {IDCHAR}({IDCHAR}|{DIGIT})*
     "0"{OCT_DIGIT}+                                                         {yylval->integer = std::strtoull(yytext, nullptr, 8); return INTEGER;}
     {DIGIT}+                                                                {yylval->integer = std::strtoull(yytext, nullptr, 10); return INTEGER;}
     {DIGIT}+("."{DIGIT}+)?([eE]{DIGIT}+)?                                   {yylval->flt = std::strtod(yytext, nullptr); return FLOAT;}
+    "\""                                                                    {yyextra->parse_str.clear(); BEGIN(STR);}
     {IDENTIFIER}                                                            {yylval->str = dup_str(yytext); return ID;}
     {WHITESPACE}                                                            {}
     {NEWLINE}                                                               {++yyextra->line;}
     .                                                                       {return ERROR_TOKEN;}
+}
+
+<STR>
+{
+    "\\\'"                                                                  {yyextra->parse_str += "\'";}
+    "\\\""                                                                  {yyextra->parse_str += "\"";}
+    "\\\\"                                                                  {yyextra->parse_str += "\\";}
+    "\\a"                                                                   {yyextra->parse_str += "\a";}
+    "\\b"                                                                   {yyextra->parse_str += "\b";}
+    "\\f"                                                                   {yyextra->parse_str += "\f";}
+    "\\n"                                                                   {yyextra->parse_str += "\n";}
+    "\\r"                                                                   {yyextra->parse_str += "\r";}
+    "\\t"                                                                   {yyextra->parse_str += "\t";}
+    "\\v"                                                                   {yyextra->parse_str += "\v";}
+    "\\"{OCT_DIGIT}+                                                        {yyextra->parse_str += char(std::strtoull(yytext + 1, nullptr, 8));}
+    "\\x"{HEX_DIGIT}+                                                       {yyextra->parse_str += char(std::strtoull(yytext + 2, nullptr, 16));}
+    "\""                                                                    {BEGIN(INITIAL); yylval->str = dup_str(yyextra->parse_str.c_str()); return STRING;}
+    {NEWLINE}                                                               {++yyextra->line; yyextra->parse_str += yytext;}
+    .                                                                       {yyextra->parse_str += yytext;}
 }
 
 %%

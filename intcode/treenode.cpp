@@ -127,6 +127,16 @@ void BitXorNode::print(std::ostream& os, size_t level)
     this->rop->print(os, level+1);
 }
 
+ConcatNode::ConcatNode(ExpressionNode* lop, ExpressionNode* rop) : lop(lop), rop(rop) {}
+
+void ConcatNode::print(std::ostream& os, size_t level)
+{
+    print_indent(os, level);
+    os << "String Concatenation Expression:" << std::endl;
+    this->lop->print(os, level+1);
+    this->rop->print(os, level+1);
+}
+
 UPlusNode::UPlusNode(ExpressionNode* op) : op(op) {}
 
 void UPlusNode::print(std::ostream& os, size_t level)
@@ -187,4 +197,20 @@ void FloatNode::print(std::ostream& os, size_t level)
 {
     print_indent(os, level);
     os << "Float (" << this->value << ")" << std::endl;
+}
+
+StringNode::StringNode(const std::string& value) : value(value) {}
+
+void StringNode::print(std::ostream& os, size_t level)
+{
+    print_indent(os, level);
+    os << "String (" << this->value << ")" << std::endl;
+}
+
+BoolNode::BoolNode(bool value) : value(value) {}
+
+void BoolNode::print(std::ostream& os, size_t level)
+{
+    print_indent(os, level);
+    os << "Boolean (" << (this->value ? "true" : "false") << ")" << std::endl;
 }

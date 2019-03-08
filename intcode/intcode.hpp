@@ -22,6 +22,7 @@ enum class IntInstr
     BITAND,
     BITOR,
     BITXOR,
+    CONCAT,
 
     UPLUS,
     NEG,
@@ -29,6 +30,8 @@ enum class IntInstr
 
     PUSHINT,
     PUSHFLT,
+    PUSHSTR,
+    PUSHBOOL,
 
     TRY,
     TRY_END

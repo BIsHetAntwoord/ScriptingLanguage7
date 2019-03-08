@@ -54,6 +54,7 @@ class VirtualMachine
         void execute_bitand(IntCode*, IntCode*&);
         void execute_bitor(IntCode*, IntCode*&);
         void execute_bitxor(IntCode*, IntCode*&);
+        void execute_concat(IntCode*, IntCode*&);
 
         void execute_uplus(IntCode*, IntCode*&);
         void execute_neg(IntCode*, IntCode*&);
@@ -61,6 +62,8 @@ class VirtualMachine
 
         void execute_pushint(IntCode*, IntCode*&);
         void execute_pushflt(IntCode*, IntCode*&);
+        void execute_pushstr(IntCode*, IntCode*&);
+        void execute_pushbool(IntCode*, IntCode*&);
 
         void execute_try(IntCode*, IntCode*&);
         void execute_try_end(IntCode*, IntCode*&);

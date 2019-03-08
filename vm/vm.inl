@@ -6,15 +6,16 @@
 ScriptValue* resolve_reference(ScriptValue*);
 bool can_arithmetic(ScriptValue*);
 
-const ValueType BINOP_TYPE_TABLE[7][7] = {
-    //NULL                  //INTEGER           //FLOAT             //STRING            //TABLE             //REFERENCE         //FUNCTION
-    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //NULL
-    {ValueType::NULL_T,     ValueType::INTEGER, ValueType::FLOAT,   ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //INTEGER
-    {ValueType::NULL_T,     ValueType::FLOAT,   ValueType::FLOAT,   ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //FLOAT
-    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //STRING
-    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //TABLE
-    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //REFERENCE
-    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}  //FUNCTION
+const ValueType BINOP_TYPE_TABLE[8][8] = {
+    //NULL                  //INTEGER           //FLOAT             //BOOLEAN           //STRING            //TABLE             //REFERENCE         //FUNCTION
+    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //NULL
+    {ValueType::NULL_T,     ValueType::INTEGER, ValueType::FLOAT,   ValueType::INTEGER, ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //INTEGER
+    {ValueType::NULL_T,     ValueType::FLOAT,   ValueType::FLOAT,   ValueType::FLOAT,   ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //FLOAT
+    {ValueType::NULL_T,     ValueType::INTEGER, ValueType::FLOAT,   ValueType::INTEGER, ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //BOOLEAN
+    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //STRING
+    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //TABLE
+    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}, //REFERENCE
+    {ValueType::NULL_T,     ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T,  ValueType::NULL_T}  //FUNCTION
 };
 
 template <typename T>

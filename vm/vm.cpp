@@ -5,6 +5,7 @@
 #include "vm/values/reference.hpp"
 #include "vm/values/string.hpp"
 #include "vm/values/table.hpp"
+#include "vm/values/bool.hpp"
 #include "intcode/intcode.hpp"
 #include "intcode/intinstr.hpp"
 #include "vm/scope.hpp"
@@ -27,11 +28,14 @@ const instr_callback INSTR_CALLBACKS[] = {
     VirtualMachine::execute_bitand,
     VirtualMachine::execute_bitor,
     VirtualMachine::execute_bitxor,
+    VirtualMachine::execute_concat,
     VirtualMachine::execute_uplus,
     VirtualMachine::execute_neg,
     VirtualMachine::execute_compl,
     VirtualMachine::execute_pushint,
     VirtualMachine::execute_pushflt,
+    VirtualMachine::execute_pushstr,
+    VirtualMachine::execute_pushbool,
     VirtualMachine::execute_try,
     VirtualMachine::execute_try_end
 };
@@ -265,6 +269,21 @@ void VirtualMachine::execute_bitxor(IntCode*, IntCode*&)
     this->execute_int_binop([](int64_t x, int64_t y) {return x ^ y;});
 }
 
+void VirtualMachine::execute_concat(IntCode*, IntCode*&)
+{
+    ScriptReference* rop = this->value_stack->back();
+    this->value_stack->pop_back();
+    ScriptReference* lop = this->value_stack->back();
+    this->value_stack->pop_back();
+
+    ScriptValue* lop_value = resolve_reference(lop);
+    ScriptValue* rop_value = resolve_reference(rop);
+
+    std::string result = lop_value->getString() + rop_value->getString();
+
+    this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptString>(result)));
+}
+
 void VirtualMachine::execute_uplus(IntCode*, IntCode*&)
 {
     ScriptReference* ref = this->value_stack->back();
@@ -325,14 +344,28 @@ void VirtualMachine::execute_pushint(IntCode* instr, IntCode*&)
 {
     IntegerIntInstr* int_instr = (IntegerIntInstr*)instr;
     int64_t value = int_instr->getInteger();
-    this->value_stack->push_back(gc.makeValue<ScriptReference>(gc.makeValue<ScriptInteger>(value)));
+    this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptInteger>(value)));
 }
 
 void VirtualMachine::execute_pushflt(IntCode* instr, IntCode*&)
 {
     FloatIntInstr* flt_instr = (FloatIntInstr*)instr;
     double value = flt_instr->getFloat();
-    this->value_stack->push_back(gc.makeValue<ScriptReference>(gc.makeValue<ScriptFloat>(value)));
+    this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptFloat>(value)));
+}
+
+void VirtualMachine::execute_pushstr(IntCode* instr, IntCode*&)
+{
+    StrIntInstr* str_instr = (StrIntInstr*)instr;
+    std::string value = str_instr->getStr();
+    this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptString>(value)));
+}
+
+void VirtualMachine::execute_pushbool(IntCode* instr, IntCode*&)
+{
+    IntegerIntInstr* int_instr = (IntegerIntInstr*)instr;
+    bool value = int_instr->getInteger();
+    this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptBoolean>(value)));
 }
 
 void VirtualMachine::execute_try(IntCode* current, IntCode*&)

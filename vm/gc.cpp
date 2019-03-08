@@ -14,19 +14,19 @@ GarbageCollector::~GarbageCollector()
     //Cleanup what remains
     for(auto i : this->all_values)
     {
-        std::cout << "Deleting value at destruction: "  << this << " (" << i->getString() << ")" << std::endl;
+        //std::cout << "Deleting value at destruction: "  << this << " (" << i->getString() << ")" << std::endl;
         delete i;
     }
 
     for(auto i : this->all_code)
     {
-        std::cout << "Deleting code at destruction: " << this << std::endl;
+        //std::cout << "Deleting code at destruction: " << this << std::endl;
         delete i;
     }
 
     for(auto i : this->all_scopes)
     {
-        std::cout << "Deleting scope at destruction: " << this << std::endl;
+        //std::cout << "Deleting scope at destruction: " << this << std::endl;
         delete i;
     }
 }
@@ -87,12 +87,17 @@ void GarbageCollector::removeValueStackRoot(std::vector<ScriptReference*>* root)
 
 void GarbageCollector::cycle()
 {
-    this->collect(); ///TODO: Add a condition to the collection
+    ///TODO: add a decent collection scheme
+    if(++this->cycle_counter == 20)
+    {
+        this->cycle_counter = 0;
+        this->collect();
+    }
 }
 
 void GarbageCollector::collect()
 {
-    std::cout << "Starting collect phase" << std::endl;
+    //std::cout << "Starting collect phase" << std::endl;
     //Add everything to the collector set
     this->unmarked_values.clear();
     for(auto i : this->all_values)
@@ -122,26 +127,26 @@ void GarbageCollector::collect()
     //Collect what remains
     for(auto i : this->unmarked_values)
     {
-        std::cout << "Collecting value at " << i << " (" << i->getString() << ")" << std::endl;
+        //std::cout << "Collecting value at " << i << " (" << i->getString() << ")" << std::endl;
         this->removeValue(i);
         delete i;
     }
 
     for(auto i : this->unmarked_code)
     {
-        std::cout << "Collecting code at " << i << std::endl;
+        //std::cout << "Collecting code at " << i << std::endl;
         this->removeCode(i);
         delete i;
     }
 
     for(auto i : this->unmarked_scopes)
     {
-        std::cout << "Collecting scope at " << i << std::endl;
+        //std::cout << "Collecting scope at " << i << std::endl;
         this->removeScope(i);
         delete i;
     }
 
-    std::cout << "End of collect phase" << std::endl;
+    //std::cout << "End of collect phase" << std::endl;
 }
 
 void GarbageCollector::addValue(ScriptValue* value)

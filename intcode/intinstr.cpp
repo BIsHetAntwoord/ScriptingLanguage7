@@ -17,6 +17,7 @@ const char* OPCODE_NAMES[] = {
     "BITAND",
     "BITOR",
     "BITXOR",
+    "CONCAT",
 
     "UPLUS",
     "NEG",
@@ -24,6 +25,8 @@ const char* OPCODE_NAMES[] = {
 
     "PUSHINT",
     "PUSHFLT",
+    "PUSHSTR",
+    "PUSHBOOL",
 
     "TRY",
     "TRY_END"

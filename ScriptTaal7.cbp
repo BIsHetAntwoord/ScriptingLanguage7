@@ -60,6 +60,8 @@
 		<Unit filename="vm/gc.hpp" />
 		<Unit filename="vm/scope.cpp" />
 		<Unit filename="vm/scope.hpp" />
+		<Unit filename="vm/values/bool.cpp" />
+		<Unit filename="vm/values/bool.hpp" />
 		<Unit filename="vm/values/float.cpp" />
 		<Unit filename="vm/values/float.hpp" />
 		<Unit filename="vm/values/function.cpp" />
@@ -73,6 +75,9 @@
 		<Unit filename="vm/values/string.hpp" />
 		<Unit filename="vm/values/table.cpp" />
 		<Unit filename="vm/values/table.hpp" />
+		<Unit filename="vm/values/table.inl">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="vm/values/value.cpp" />
 		<Unit filename="vm/values/value.hpp" />
 		<Unit filename="vm/vm.cpp" />

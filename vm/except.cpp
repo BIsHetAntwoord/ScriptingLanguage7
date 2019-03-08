@@ -1,5 +1,7 @@
 #include "vm/except.hpp"
 
+#include <iostream>
+
 void ExceptionInfo::addHandler(IntCode* resume, size_t unwind)
 {
     this->resume_handlers.push_back(resume);
@@ -14,6 +16,7 @@ void ExceptionInfo::removeHandler()
 
 bool ExceptionInfo::getHandler(IntCode*& resume, size_t& unwind)
 {
+    std::cout << "Number of resume handlers: " << this->resume_handlers.size() << std::endl;
     if(this->resume_handlers.size() > 0)
     {
         resume = this->resume_handlers.back();

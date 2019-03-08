@@ -54,7 +54,7 @@ double mod(double x, double y)
     return std::fmod(x, y);
 }
 
-VirtualMachine::VirtualMachine()
+VirtualMachine::VirtualMachine() : value_stack(nullptr)
 {
     this->global_scope = this->gc.makeScope(this->gc);
     this->gc.addRoot(this->global_scope);
@@ -165,6 +165,7 @@ bool VirtualMachine::handle_exception(IntCode*& next)
             this->value_stack->pop_back();
 
         this->value_stack->push_back(top_of_stack);
+        this->exception_state = false;
     }
     return has_handler;
 }

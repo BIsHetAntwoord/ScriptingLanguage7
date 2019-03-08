@@ -26,6 +26,8 @@ class ScriptInteger : public ScriptValue
         {
             return this->value;
         }
+
+        virtual std::string getString() const;
 };
 
 #endif // VM_VALUES_INTEGER_HPP_INCLUDED

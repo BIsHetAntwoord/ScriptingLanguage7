@@ -21,6 +21,7 @@ class VirtualMachine
         std::vector<ScriptReference*>* value_stack;
         std::vector<Scope*> scope_stack;
         bool exception_state = false;
+        std::string termination_msg;
 
         void execute_function(ScriptFunction*);
 
@@ -30,11 +31,14 @@ class VirtualMachine
 
         template <typename T>
         void execute_binop(T callback);
+
+        template <typename T>
+        void execute_int_binop(T callback);
     public:
         VirtualMachine();
         ~VirtualMachine();
 
-        void execute(IntCode*);
+        bool execute(IntCode*, std::string*);
 
         //Instructions
         void execute_nop(IntCode*, IntCode*&);
@@ -56,6 +60,7 @@ class VirtualMachine
         void execute_compl(IntCode*, IntCode*&);
 
         void execute_pushint(IntCode*, IntCode*&);
+        void execute_pushflt(IntCode*, IntCode*&);
 
         void execute_try(IntCode*, IntCode*&);
         void execute_try_end(IntCode*, IntCode*&);

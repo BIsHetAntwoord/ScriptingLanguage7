@@ -28,6 +28,7 @@ enum class IntInstr
     COMPL,
 
     PUSHINT,
+    PUSHFLT,
 
     TRY,
     TRY_END

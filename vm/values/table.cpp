@@ -3,6 +3,8 @@
 #include "vm/values/reference.hpp"
 #include "vm/values/string.hpp"
 
+#include <sstream>
+
 ScriptTable::ScriptTable() {}
 
 void ScriptTable::mark(GarbageCollector& gc)
@@ -29,7 +31,7 @@ ScriptReference* ScriptTable::get(const std::string& name)
         if(it.first->getType() == ValueType::STRING)
         {
             ScriptString* str = (ScriptString*)it.first;
-            if(str->getStr() == name)
+            if(str->getString() == name)
                 return it.second;
         }
     }
@@ -43,4 +45,11 @@ void ScriptTable::set(const std::string& name, ScriptValue* value, GarbageCollec
         this->values[gc.makeValue<ScriptString>(name)] = gc.makeValue<ScriptReference>(value);
     else
         val->setValue(value);
+}
+
+std::string ScriptTable::getString() const
+{
+    std::stringstream ss;
+    ss << "table@" << this;
+    return ss.str();
 }

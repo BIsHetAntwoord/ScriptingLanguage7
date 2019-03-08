@@ -18,7 +18,7 @@ class ScriptString : public ScriptValue
             return ValueType::STRING;
         }
 
-        inline std::string getStr()
+        inline virtual std::string getString() const
         {
             return this->value;
         }

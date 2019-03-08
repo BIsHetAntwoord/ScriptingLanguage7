@@ -180,3 +180,11 @@ void IntegerNode::print(std::ostream& os, size_t level)
     print_indent(os, level);
     os << "Integer (" << this->value << ")" << std::endl;
 }
+
+FloatNode::FloatNode(double value) : value(value) {}
+
+void FloatNode::print(std::ostream& os, size_t level)
+{
+    print_indent(os, level);
+    os << "Float (" << this->value << ")" << std::endl;
+}

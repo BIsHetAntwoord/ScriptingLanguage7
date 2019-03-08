@@ -23,6 +23,7 @@ const char* OPCODE_NAMES[] = {
     "COMPL",
 
     "PUSHINT",
+    "PUSHFLT",
 
     "TRY",
     "TRY_END"
@@ -51,6 +52,15 @@ IntegerIntInstr::IntegerIntInstr(IntInstr op, uint64_t value) : IntCode(op), int
 void IntegerIntInstr::print(std::ostream& os)
 {
     os << this->ip << ": " << OPCODE_NAMES[size_t(this->op)] << " " << this->integer << std::endl;
+    if(this->next)
+        this->next->print(os);
+}
+
+FloatIntInstr::FloatIntInstr(IntInstr op, double value) : IntCode(op), flt(value) {}
+
+void FloatIntInstr::print(std::ostream& os)
+{
+    os << this->ip << ": " << OPCODE_NAMES[size_t(this->op)] << " " << this->flt << std::endl;
     if(this->next)
         this->next->print(os);
 }

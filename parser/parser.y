@@ -31,6 +31,7 @@
 %token CLOSE_PAR ")"
 
 %token<integer> INTEGER "integer"
+%token<flt> FLOAT "float"
 %token<str> ID
 %token ERROR_TOKEN "error token"
 
@@ -98,6 +99,7 @@ rvalue
 
 constant
     : INTEGER                                                           {$$ = new IntegerNode($1);}
+    | FLOAT                                                             {$$ = new FloatNode($1);}
     ;
 
 %%

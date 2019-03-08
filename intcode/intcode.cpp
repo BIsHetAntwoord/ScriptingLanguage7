@@ -205,3 +205,8 @@ IntCode* IntegerNode::generate(const compile_info& info)
 {
     return new IntegerIntInstr(IntInstr::PUSHINT, this->value);
 }
+
+IntCode* FloatNode::generate(const compile_info& info)
+{
+    return new FloatIntInstr(IntInstr::PUSHFLT, this->value);
+}

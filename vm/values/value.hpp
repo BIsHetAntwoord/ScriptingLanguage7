@@ -4,6 +4,7 @@
 class GarbageCollector;
 
 #include <cstdint>
+#include <string>
 
 enum class ValueType
 {
@@ -28,6 +29,7 @@ class ScriptValue
 
         virtual double getFloat() const;
         virtual int64_t getInteger() const;
+        virtual std::string getString() const = 0;
 };
 
 #endif // VM_VALUES_VALUE_HPP_INCLUDED

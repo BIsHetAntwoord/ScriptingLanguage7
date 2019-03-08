@@ -264,4 +264,16 @@ class IntegerNode : public ConstantNode
         virtual IntCode* generate(const compile_info&);
 };
 
+class FloatNode : public ConstantNode
+{
+    private:
+        double value;
+    public:
+        FloatNode(double);
+        virtual ~FloatNode() = default;
+
+        virtual void print(std::ostream&, size_t);
+        virtual IntCode* generate(const compile_info&);
+};
+
 #endif // TREENODE_HPP_INCLUDED

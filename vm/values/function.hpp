@@ -31,6 +31,8 @@ class ScriptFunction : public ScriptValue
         {
             return ValueType::FUNCTION;
         }
+
+        virtual std::string getString() const;
 };
 
 #endif // VM_VALUES_FUNCTION_HPP_INCLUDED

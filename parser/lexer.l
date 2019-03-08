@@ -56,6 +56,7 @@ IDENTIFIER {IDCHAR}({IDCHAR}|{DIGIT})*
     "0x"{HEX_DIGIT}+                                                        {yylval->integer = std::strtoull(yytext, nullptr, 16); return INTEGER;}
     "0"{OCT_DIGIT}+                                                         {yylval->integer = std::strtoull(yytext, nullptr, 8); return INTEGER;}
     {DIGIT}+                                                                {yylval->integer = std::strtoull(yytext, nullptr, 10); return INTEGER;}
+    {DIGIT}+("."{DIGIT}+)?([eE]{DIGIT}+)?                                   {yylval->flt = std::strtod(yytext, nullptr); return FLOAT;}
     {IDENTIFIER}                                                            {yylval->str = dup_str(yytext); return ID;}
     {WHITESPACE}                                                            {}
     {NEWLINE}                                                               {++yyextra->line;}

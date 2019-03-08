@@ -23,9 +23,16 @@ class ScriptTable : public ScriptValue
             return ValueType::TABLE;
         }
 
+        virtual std::string getString() const;
+
         bool contains(const std::string&);
         ScriptReference* get(const std::string&);
         void set(const std::string&, ScriptValue*, GarbageCollector&);
+
+        template <typename T>
+        void foreach(T callback);
 };
+
+#include "vm/values/table.inl"
 
 #endif // VM_VALUES_TABLE_HPP_INCLUDED

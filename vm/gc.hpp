@@ -44,6 +44,10 @@ class GarbageCollector
         void addCode(IntCode*);
         void addScope(Scope*);
 
+        void removeValue(ScriptValue*);
+        void removeCode(IntCode*);
+        void removeScope(Scope*);
+
         template <typename T, typename... Args>
         T* makeValue(Args&&... args)
         {

@@ -24,6 +24,8 @@ class ScriptFloat : public ScriptValue
         {
             return this->value;
         }
+
+        virtual std::string getString() const;
 };
 
 #endif // VM_VALUES_FLOAT_HPP_INCLUDED

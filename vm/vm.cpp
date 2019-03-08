@@ -4,9 +4,13 @@
 #include "vm/values/integer.hpp"
 #include "vm/values/reference.hpp"
 #include "vm/values/string.hpp"
+#include "vm/values/table.hpp"
 #include "intcode/intcode.hpp"
 #include "intcode/intinstr.hpp"
 #include "vm/scope.hpp"
+
+#include <cmath>
+#include <iostream>
 
 using instr_callback = void(VirtualMachine::*)(IntCode*, IntCode*&);
 
@@ -27,6 +31,7 @@ const instr_callback INSTR_CALLBACKS[] = {
     VirtualMachine::execute_neg,
     VirtualMachine::execute_compl,
     VirtualMachine::execute_pushint,
+    VirtualMachine::execute_pushflt,
     VirtualMachine::execute_try,
     VirtualMachine::execute_try_end
 };
@@ -37,6 +42,16 @@ ScriptValue* resolve_reference(ScriptValue* ref)
         ref = ((ScriptReference*)ref)->getValue();
 
     return ref;
+}
+
+int64_t mod(int64_t x, int64_t y)
+{
+    return x % y;
+}
+
+double mod(double x, double y)
+{
+    return std::fmod(x, y);
 }
 
 VirtualMachine::VirtualMachine()
@@ -76,11 +91,29 @@ void VirtualMachine::execute_function(ScriptFunction* func)
         if(this->exception_state)
         {
             if(!this->handle_exception(next))
+            {
+                ScriptReference* ref = this->value_stack->back();
+                this->value_stack->pop_back();
+                //Unhandled exception, push it to the calling function
+                if(enclosing_value_stack != nullptr)
+                    enclosing_value_stack->push_back(ref);
+                else
+                {
+                    ///TODO: actually parse the exception info
+                    this->termination_msg = resolve_reference(ref)->getString();
+                }
                 break;
+            }
         }
+
+        this->gc.cycle();
 
         current_instr = next;
     }
+
+    current_scope->getTable()->foreach([](ScriptValue* key, ScriptReference* value) {
+        std::cout << "Variable " << key->getString() << " -> " << resolve_reference(value)->getString() << std::endl;
+    });
 
     this->gc.removeValueStackRoot(this->value_stack);
 
@@ -94,11 +127,18 @@ void VirtualMachine::execute_function(ScriptFunction* func)
     this->gc.removeRoot(func);
 }
 
-void VirtualMachine::execute(IntCode* bytecode)
+bool VirtualMachine::execute(IntCode* bytecode, std::string* msg)
 {
     bytecode->addBlocks(this->gc);
     ScriptFunction* func = this->gc.makeValue<ScriptFunction>(bytecode, this->global_scope);
     this->execute_function(func);
+
+    if(this->exception_state)
+    {
+        if(msg != nullptr)
+            *msg = this->termination_msg;
+    }
+    return !this->exception_state;
 }
 
 void VirtualMachine::throw_exception()
@@ -131,7 +171,18 @@ bool VirtualMachine::handle_exception(IntCode*& next)
 
 void VirtualMachine::execute_nop(IntCode*, IntCode*&) {}
 
-void VirtualMachine::execute_store(IntCode*, IntCode*&) {}
+void VirtualMachine::execute_store(IntCode*, IntCode*&)
+{
+    ScriptReference* value = this->value_stack->back();
+    this->value_stack->pop_back();
+    ScriptReference* ref = this->value_stack->back();
+
+    //Go to the lowest reference
+    while(ref->getValue()->getType() == ValueType::REFERENCE)
+        ref = (ScriptReference*)ref->getValue();
+
+    ref->setValue(resolve_reference(value));
+}
 
 void VirtualMachine::execute_pop(IntCode*, IntCode*&)
 {
@@ -170,21 +221,117 @@ void VirtualMachine::execute_mul(IntCode*, IntCode*&)
 
 void VirtualMachine::execute_div(IntCode*, IntCode*&)
 {
+    this->execute_binop([this](auto x, auto y) {
+        if(std::is_integral<decltype(y)>::value)
+        {
+            if(y == (decltype(y))0)
+            {
+                this->throw_exception("Integer division by zero");
+                return (decltype(y))0;
+            }
+        }
+        return x / y;
+    });
 }
 
-void VirtualMachine::execute_mod(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_bitand(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_bitor(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_bitxor(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_uplus(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_neg(IntCode*, IntCode*&) {}
-void VirtualMachine::execute_compl(IntCode*, IntCode*&) {}
+void VirtualMachine::execute_mod(IntCode*, IntCode*&)
+{
+    this->execute_binop([this](auto x, auto y) {
+        if(std::is_integral<decltype(y)>::value)
+        {
+            if(y == (decltype(y))0)
+            {
+                this->throw_exception("Integer division by zero");
+                return (decltype(y))0;
+            }
+        }
+        return mod(x, y);
+    });
+}
+
+void VirtualMachine::execute_bitand(IntCode*, IntCode*&)
+{
+    this->execute_int_binop([](int64_t x, int64_t y) {return x & y;});
+}
+
+void VirtualMachine::execute_bitor(IntCode*, IntCode*&)
+{
+    this->execute_int_binop([](int64_t x, int64_t y) {return x | y;});
+}
+
+void VirtualMachine::execute_bitxor(IntCode*, IntCode*&)
+{
+    this->execute_int_binop([](int64_t x, int64_t y) {return x ^ y;});
+}
+
+void VirtualMachine::execute_uplus(IntCode*, IntCode*&)
+{
+    ScriptReference* ref = this->value_stack->back();
+    this->value_stack->pop_back();
+
+    ScriptValue* val = resolve_reference(ref);
+    if(val->getType() == ValueType::FLOAT)
+    {
+        this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptFloat>(val->getFloat())));
+    }
+    else if(val->getType() == ValueType::INTEGER)
+    {
+        this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptInteger>(val->getInteger())));
+    }
+    else
+    {
+        this->throw_exception("Attempted to perform arithmetic on a non-arithmetic type");
+    }
+}
+
+void VirtualMachine::execute_neg(IntCode*, IntCode*&)
+{
+    ScriptReference* ref = this->value_stack->back();
+    this->value_stack->pop_back();
+
+    ScriptValue* val = resolve_reference(ref);
+    if(val->getType() == ValueType::FLOAT)
+    {
+        this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptFloat>(-val->getFloat())));
+    }
+    else if(val->getType() == ValueType::INTEGER)
+    {
+        this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptInteger>(-val->getInteger())));
+    }
+    else
+    {
+        this->throw_exception("Attempted to perform arithmetic on a non-arithmetic type");
+    }
+}
+
+void VirtualMachine::execute_compl(IntCode*, IntCode*&)
+{
+    ScriptReference* ref = this->value_stack->back();
+    this->value_stack->pop_back();
+
+    ScriptValue* val = resolve_reference(ref);
+    if(val->getType() == ValueType::INTEGER)
+    {
+        this->value_stack->push_back(this->gc.makeValue<ScriptReference>(this->gc.makeValue<ScriptInteger>(~val->getInteger())));
+    }
+    else
+    {
+        this->throw_exception("Attempted to perform integer arithmetic on a non-integer type");
+    }
+}
 
 void VirtualMachine::execute_pushint(IntCode* instr, IntCode*&)
 {
     IntegerIntInstr* int_instr = (IntegerIntInstr*)instr;
     int64_t value = int_instr->getInteger();
     this->value_stack->push_back(gc.makeValue<ScriptReference>(gc.makeValue<ScriptInteger>(value)));
+}
+
+void VirtualMachine::execute_pushflt(IntCode* instr, IntCode*&)
+{
+    FloatIntInstr* flt_instr = (FloatIntInstr*)instr;
+    double value = flt_instr->getFloat();
+    this->value_stack->push_back(gc.makeValue<ScriptReference>(gc.makeValue<ScriptFloat>(value)));
 }
 
 void VirtualMachine::execute_try(IntCode* current, IntCode*&)

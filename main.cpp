@@ -27,10 +27,17 @@ int main(int argc, char* argv[])
 
         bytecode->setIP(0);
 
+        std::cout << std::endl << "Bytecode: " << std::endl;
         bytecode->print(std::cout);
 
+        std::cout << std::endl << "Virtual machine execution: " << std::endl;
+
         VirtualMachine vm;
-        //vm.execute(bytecode.release());
+        std::string msg;
+        if(!vm.execute(bytecode.release(), &msg))
+        {
+            std::cerr << "Terminated by uncaught exception: " << msg << std::endl;
+        }
     }
     catch(ParseException& e)
     {

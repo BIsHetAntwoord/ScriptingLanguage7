@@ -46,6 +46,22 @@ class IntegerIntInstr : public IntCode
         }
 };
 
+class FloatIntInstr : public IntCode
+{
+    private:
+        double flt;
+    public:
+        FloatIntInstr(IntInstr, double);
+        virtual ~FloatIntInstr() = default;
+
+        virtual void print(std::ostream& os);
+
+        inline double getFloat() const
+        {
+            return this->flt;
+        }
+};
+
 class TargetIntInstr : public IntCode
 {
     private:

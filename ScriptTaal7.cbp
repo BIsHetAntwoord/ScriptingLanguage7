@@ -60,16 +60,24 @@
 		<Unit filename="vm/gc.hpp" />
 		<Unit filename="vm/scope.cpp" />
 		<Unit filename="vm/scope.hpp" />
+		<Unit filename="vm/values/float.cpp" />
+		<Unit filename="vm/values/float.hpp" />
 		<Unit filename="vm/values/function.cpp" />
 		<Unit filename="vm/values/function.hpp" />
+		<Unit filename="vm/values/integer.cpp" />
+		<Unit filename="vm/values/integer.hpp" />
+		<Unit filename="vm/values/null.hpp" />
 		<Unit filename="vm/values/reference.cpp" />
 		<Unit filename="vm/values/reference.hpp" />
+		<Unit filename="vm/values/string.cpp" />
+		<Unit filename="vm/values/string.hpp" />
 		<Unit filename="vm/values/table.cpp" />
 		<Unit filename="vm/values/table.hpp" />
 		<Unit filename="vm/values/value.cpp" />
 		<Unit filename="vm/values/value.hpp" />
 		<Unit filename="vm/vm.cpp" />
 		<Unit filename="vm/vm.hpp" />
+		<Unit filename="vm/vm.inl" />
 		<Extensions>
 			<code_completion />
 			<envvars />

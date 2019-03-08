@@ -22,6 +22,11 @@ class ScriptNull : public ScriptValue
         {
             return 0.0;
         }
+
+        inline virtual std::string getString() const
+        {
+            return "null";
+        }
 };
 
 #endif // SCRIPT_VALUES_NULL_HPP_INCLUDED

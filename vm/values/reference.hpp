@@ -26,6 +26,8 @@ class ScriptReference : public ScriptValue
         {
             return ValueType::REFERENCE;
         }
+
+        virtual std::string getString() const;
 };
 
 #endif // VM_VALUES_REFERENCE_HPP_INCLUDED
